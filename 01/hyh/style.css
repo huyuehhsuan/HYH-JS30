@@ -1,0 +1,60 @@
+html {
+    font-size: 10px;
+    background: url('./background.jpg') bottom center;
+    background-size: cover;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+.keys {
+    display: flex;
+    flex: 1;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.key {
+    border: 1px solid gray;
+    border-radius: .5rem;
+    margin: .1rem;
+    font-size: 1.5rem;
+    padding: 1rem .5rem;
+    transition: all .1s ease;
+    width: 8rem;
+    height: 30rem;
+    text-align: center;
+    color: darkgray;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.playing {
+    transform: scale(1.1);
+    box-shadow: 0 0 1px gray;
+    background: rgb(243, 243, 243);
+    color: darkgray;
+}
+
+.playing .sound {
+    color: tomato;
+}
+
+kbd {
+    display: block;
+    font-size: 4rem;
+}
+
+.sound {
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: .1rem;
+    color: #ffc600;
+}
