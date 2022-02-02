@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Flex Panels 💪</title>
+    <title>HYH-Flex Panels 💪</title>
     <link href='https://fonts.googleapis.com/css?family=Amatic+SC' rel='stylesheet' type='text/css'>
 </head>
 
@@ -103,6 +103,15 @@
         
         .panel.open {
             font-size: 40px;
+            flex: 5
+        }
+        
+        .panel.open-active :first-child {
+            transform: translateY(0);
+        }
+        
+        .panel.open-active :last-child {
+            transform: translateY(0);
         }
     </style>
 
@@ -136,6 +145,23 @@
     </div>
 
     <script>
+        const panels = document.querySelectorAll(".panel")
+
+        function openHandler() {
+            console.log("open");
+            this.classList.toggle("open")
+        }
+
+        function toggleHandler(e) {
+            console.log(e);
+            if (e.propertyName.includes('flex')) {
+                this.classList.toggle("open-active")
+            }
+        }
+        panels.forEach((item) => {
+            item.addEventListener("click", openHandler)
+            item.addEventListener("transitionend", toggleHandler)
+        })
     </script>
 
 
