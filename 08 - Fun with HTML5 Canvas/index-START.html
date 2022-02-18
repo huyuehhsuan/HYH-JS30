@@ -1,19 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>HTML5 Canvas</title>
-</head>
-<body>
-<canvas id="draw" width="800" height="800"></canvas>
-<script>
-</script>
 
-<style>
-  html, body {
-    margin: 0;
-  }
-</style>
+<head>
+    <meta charset="UTF-8">
+    <title>HYH-HTML5 Canvas</title>
+</head>
+
+<body>
+    <canvas id="draw" width="800" height="800" class="canvas"></canvas>
+    <input type="color" id="favcolor" name="favcolor" value="#000">
+    <label for="favcolor">choose color</label>
+    <label for="width">choose width</label>
+    <input id="width" type="range" name="width" min="1" max="50" value="10">
+    <script>
+        (function() {
+            let canvas = document.querySelector("#draw");
+            let colorInput = document.querySelector("#favcolor")
+            let widthInput = document.querySelector("#width")
+            let ctx = canvas.getContext("2d");
+            ctx.lineWidth = 10
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            let drawing = false;
+            let x = 0,
+                y = 0;
+
+            colorInput.addEventListener("change", (e) => {
+                let favcolor = document.querySelector("#favcolor").value;
+                ctx.strokeStyle = `${favcolor}`;
+            })
+            widthInput.addEventListener("change", (e) => {
+                let width = document.querySelector("#width").value;
+                console.log(width)
+                ctx.lineWidth = width;
+            })
+            canvas.addEventListener("mousedown", (e) => {
+                drawing = true;
+                [x, y] = [e.offsetX, e.offsetY]
+                ctx.beginPath();
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            })
+            canvas.addEventListener("mousemove", (e) => {
+                if (!drawing) return
+                ctx.beginPath();
+                ctx.lineTo(x, y);
+                [x, y] = [e.offsetX, e.offsetY];
+                ctx.stroke();
+            })
+            canvas.addEventListener("mouseup", (e) => {
+                drawing = false;
+                [x, y] = [e.offsetX, e.offsetY]
+                console.log([x, y]);
+            })
+            canvas.addEventListener("mouseleave", () => {
+                drawing = false
+            })
+
+
+        }())
+    </script>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+        }
+        
+        .canvas {
+            outline: 1px solid red;
+        }
+    </style>
 
 </body>
+
 </html>
