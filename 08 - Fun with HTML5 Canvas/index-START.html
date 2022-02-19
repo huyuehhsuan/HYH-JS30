@@ -7,71 +7,132 @@
 </head>
 
 <body>
-    <canvas id="draw" width="800" height="800" class="canvas"></canvas>
-    <input type="color" id="favcolor" name="favcolor" value="#000">
-    <label for="favcolor">choose color</label>
-    <label for="width">choose width</label>
-    <input id="width" type="range" name="width" min="1" max="50" value="10">
+    <div class="wrap">
+        <div class="settings">
+            <div>
+                <label for="favcolor">choose color</label>
+                <input type="color" id="favcolor" name="favcolor" value="#000"><br/>
+                <label for="rainbow">rainbow color</label>
+                <input type="button" id="rainbow" value="rainbow">
+            </div>
+            <div>
+                <label for="width">choose width</label>
+                <input id="width" type="range" name="width" min="1" max="50" value="10"><br/>
+                <label for="eraser">eraser</label>
+                <input type="button" id="eraser" value="eraser">
+            </div>
+        </div>
+        <canvas id="draw" width="500" height="500" class="canvas"></canvas>
+    </div>
     <script>
         (function() {
             let canvas = document.querySelector("#draw");
             let colorInput = document.querySelector("#favcolor")
             let widthInput = document.querySelector("#width")
+            let rainbowBtn = document.querySelector("#rainbow")
+            let eraserBtn = document.querySelector("#eraser")
             let ctx = canvas.getContext("2d");
             ctx.lineWidth = 10
             ctx.lineJoin = 'round';
             ctx.lineCap = 'round';
-            let drawing = false;
+            let drawing = false,
+                down = false;
+            let drawingRainbow = false;
+            let eraser = false
+            let deg = 0
             let x = 0,
                 y = 0;
-
             colorInput.addEventListener("change", (e) => {
+                drawingRainbow = false
+                down = false
+                drawing = false
                 let favcolor = document.querySelector("#favcolor").value;
                 ctx.strokeStyle = `${favcolor}`;
             })
             widthInput.addEventListener("change", (e) => {
+                down = false
+                drawing = false
                 let width = document.querySelector("#width").value;
-                console.log(width)
                 ctx.lineWidth = width;
+            })
+            rainbowBtn.addEventListener("click", () => {
+                drawingRainbow = true
+                down = false
+                drawing = false
+            })
+            eraserBtn.addEventListener("click", () => {
+                drawingRainbow = false
+                down = false
+                ctx.strokeStyle = "#fff"
             })
             canvas.addEventListener("mousedown", (e) => {
                 drawing = true;
+                down = true;
                 [x, y] = [e.offsetX, e.offsetY]
                 ctx.beginPath();
                 ctx.lineTo(x, y);
                 ctx.stroke();
             })
             canvas.addEventListener("mousemove", (e) => {
-                if (!drawing) return
+                if (!down) return
+                if (drawingRainbow) {
+                    deg = deg + 1 > 360 ? 0 : deg + 1
+                    ctx.strokeStyle = `hsl(${deg},100%,50%)`;
+                }
                 ctx.beginPath();
                 ctx.lineTo(x, y);
                 [x, y] = [e.offsetX, e.offsetY];
                 ctx.stroke();
             })
             canvas.addEventListener("mouseup", (e) => {
-                drawing = false;
-                [x, y] = [e.offsetX, e.offsetY]
-                console.log([x, y]);
+                    drawing = false;
+                    down = false;
+                    [x, y] = [e.offsetX, e.offsetY]
+                })
+                // canvas.addEventListener("mouseleave", () => {
+                //     drawing = true
+                //     down = true
+                // })
+            canvas.addEventListener("mouseenter", (e) => {
+                if (drawing && down) {
+                    ctx.beginPath();
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                }
             })
-            canvas.addEventListener("mouseleave", () => {
-                drawing = false
-            })
-
-
         }())
     </script>
-
     <style>
         html,
         body {
+            width: 100%;
+            height: 100vh;
             margin: 0;
+            display: flex;
+            background: rgb(2, 0, 36);
+            background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
+        }
+        
+        .wrap {
+            max-width: 800px;
+            margin: 100px auto;
         }
         
         .canvas {
-            outline: 1px solid red;
+            background-color: #fff;
+            margin-top: 30px;
+        }
+        
+        .settings {
+            display: flex;
+            color: #fff;
+            font-size: 24px;
+        }
+        
+        .settings>div {
+            margin: 0 15px;
         }
     </style>
-
 </body>
 
 </html>
